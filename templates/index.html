@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>TradersFlux</title>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">TradersFlux</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-5">
+      <form action="/" method = "POST">
+        <div class="mb-3">
+          <label for="entryPrice" class="form-label">Entry Price</label>
+          <input type="number" class="form-control" name = "entryPrice" id="entryPrice" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="takeProfit" class="form-label">Take Profit</label>
+          <input type="number" class="form-control" name = "takeProfit" id="takeProfit" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="stopLoss" class="form-label">Stop Loss</label>
+          <input type="number" class="form-control" name = "stopLoss" id="stopLoss" aria-describedby="emailHelp">
+        </div>
+        <!--<div class="mb-3">
+          <label for="volume" class="form-label">Volume</label>
+          <input type="number" class="form-control" name = "volume" id="volume" aria-describedby="emailHelp">
+        </div>-->
+        <div class="mb-3">
+          <label for="comission" class="form-label">Commission</label>
+          <input type="number" class="form-control" name = "comission" id="comission" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="swap" class="form-label">Swap</label>
+          <input type="number" class="form-control" name = "swap" id="swap" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="riskTollerance" class="form-label">Risk Tolerance</label>
+          <input type="number" class="form-control" name = "riskTollerance" id="riskTollerance" step = "0.0001" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="positionSize" class="form-label">Position Size</label>
+          <input type="number" class="form-control" name = "positionSize" id="positionSize" step = "0.0001" aria-describedby="emailHelp">
+        </div>
+        <button type="submit" class="btn btn-dark">Submit</button>
+      </form>
+    </div>
+    <div class="container my-5">
+      <h2>Simulation Output</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Sno</th>
+            <th scope="col">Entry Price</th>
+            <th scope="col">Take Profit</th>
+            <th scope="col">Stop Loss</th>
+            <!--<th scope="col">Volume</th>-->
+            <th scope="col">Commission</th>
+            <th scope="col">Swap</th>
+            <th scope="col">Risk Tolerance</th>
+            <th scope="col">Position Size</th>
+            <th scope="col">Risk Exposure</th>
+            <th scope="col">Risk-Reward Ratio</th>
+            <th scope="col">ScenarioAExitPrice</th>
+            <th scope="col">ScenarioAGrossProfit</th>
+            <th scope="col">ScenarioANetProfit</th>
+            <th scope="col">ScenarioBExitPrice</th>
+            <th scope="col">ScenarioBGrossLoss</th>
+            <th scope="col">ScenarioBNetLoss</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for risk_m in allRisk %} 
+          <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td>{{risk_m.entryPrice}}</td>
+            <td>{{risk_m.takeProfit}}</td>
+            <td>{{risk_m.stopLoss}}</td>
+            <!--<td>{{risk_m.volume}}</td>-->
+            <td>{{risk_m.comission}}</td>
+            <td>{{risk_m.swap}}</td>
+            <td>{{risk_m.riskTollerance}}</td>
+            <td>{{risk_m.positionSize}}</td>
+            <td>{{risk_m.riskExposure}}</td>
+            <td>{{risk_m.riskRewardRatio}}</td>
+            <td>{{risk_m.senarioAExitPrice}}</td>
+            <td>{{risk_m.senarioAGrossProfit}}</td>
+            <td>{{risk_m.senarioANetProfit}}</td>
+            <td>{{risk_m.senarioBExitPrice}}</td>
+            <td>{{risk_m.senarioBGrossLoss}}</td>
+            <td>{{risk_m.senarioBNetLoss}}</td>
+            <td><a href = "/delete/{{risk_m.sno}}" type="button" class="btn btn-outline-dark">Delete</button></td>
+          </tr>
+          
+          {% endfor %}
+          
+        </tbody>
+      </table>
+      <!--<div class="my-5">
+        {{ pie_chart_html|safe }}
+      </div>
+      <h2>Risk-to-Reward Ratio</h2>
+      <div>
+        {{ ratio_figure_html|safe }}
+      </div>-->
+  
+    </div>
+    <div class="container">
+      <div class="row row-cols-3">
+        <div class="col">
+          {{ pie_chart_html|safe }}
+        </div>
+        <div class="col" style="width: 300px; height: 300px;">
+          {{ ratio_figure_html|safe }}
+        </div>
+        <div class="col">
+          <iframe src="./static/bar_graph.html" width="600" height="400" frameBorder="0"></iframe>
+        </div>
+        <div class="col">
+          <iframe src="./static/scatter_plot.html" width="1200" height="400" frameBorder="0"></iframe>
+        </div>
+    </div>
+    
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+    <!--<iframe src = "./static/pieChart.html" height="400" width="400" frameBorder="0"></iframe>-->
+    <!--<iframe src="./static/bar_graph.html" width="600" height="400" frameBorder="0"></iframe>
+    <iframe src="./static/scatter_plot.html" width="1200" height="400" frameBorder="0"></iframe>-->
+    <!--<iframe src="./static/ratio_figure_html.html" width="400" height="400" frameBorder="0"></iframe>-->
+  </body>
+</html>
